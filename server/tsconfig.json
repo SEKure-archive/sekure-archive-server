@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "target": "es5"
+    },
+    "exclude": [
+        "node_modules",
+        "target"
+    ]
+}
