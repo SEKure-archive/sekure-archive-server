@@ -13,7 +13,7 @@ export class Db {
         return new Promise((resolve, reject) => {
             Db.pool = new Pool({
                 host: process.env.PGSQL_HOST || 'localhost',
-                user: 'postgres',
+                user: process.env.PGSQL_USER || 'postgres',
                 password: process.env.PGSQL_PASSWORD || 'postgres',
                 database: process.env.PGSQL_DATABASE || 'sekure_archive_development',
             });
