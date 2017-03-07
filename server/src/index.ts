@@ -6,6 +6,8 @@ import * as https from 'https';
 import { start } from './application';
 import { Db } from './db';
 
+const PORT = process.env.PORT || 80;
+
 Db.initialize().then(() => {
     if (process.env.SSL_KEY && process.env.SSL_CERT) {
         production();
@@ -16,9 +18,9 @@ Db.initialize().then(() => {
 
 function development() {
     let application = start();
-    application.set('port', 8080);
+    application.set('port', PORT);
     let server = http.createServer(application);
-    server.listen(8080);
+    server.listen(PORT);
     server.on('listening', () => console.log(`Listening on ${server.address().port}...`));
     server.on('close', Db.terminate);
     server.on('error', console.error);

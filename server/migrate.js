@@ -81,7 +81,7 @@ function down(client) {
 function migrate(direction) {
     let client = new pg.Client({
         host: process.env.PGSQL_HOST || 'localhost',
-        user: 'postgres',
+        user: process.env.PGSQL_USER || 'postgres',
         password: process.env.PGSQL_PASSWORD || 'postgres',
         database: process.env.PGSQL_DATABASE || 'sekure_archive_development',
     });
