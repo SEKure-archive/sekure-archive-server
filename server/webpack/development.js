@@ -17,7 +17,6 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.BCRYPT_ROUNDS': 5,
             'process.env.JWT_SECRET': JSON.stringify('TOPSECRET'),
-            'process.env.PGSQL_DATABASE': JSON.stringify('sekure_archive_development'),
         }),
     ],
 };
