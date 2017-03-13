@@ -3,7 +3,8 @@ const UP = `
         id BIGSERIAL CONSTRAINT PK_file PRIMARY KEY,
         folder_id BIGINT REFERENCES folder(id),
         name TEXT NOT NULL,
-        mime TEXT NOT NULL
+        mime TEXT NOT NULL,
+        size BIGINT NOT NULL
     )
 `;
 

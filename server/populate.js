@@ -24,26 +24,26 @@ function addUser(email, password, callback) {
     makeRequest('POST', '/accounts', { email: email, password: password }, null, callback);
 }
 
-function addFile(authorization, folder_id, name, mime) {
-    let body = { folder_id: folder_id, name: name, mime: mime };
+function addFile(authorization, folder_id, name, mime, size) {
+    let body = { folder_id: folder_id, name: name, mime: mime, size: size };
     makeRequest('POST', '/files', body, { authorization: `Bearer ${authorization}` });
 }
 
 function addFolder(authorization, path) {
     let headers = { authorization: `Bearer ${authorization}` };
     makeRequest('POST', '/folders', { path: path }, headers, (body) => {
-        addFile(authorization, body.id, 'a.txt', 'text/plain');
-        addFile(authorization, body.id, 'b.txt', 'text/plain');
-        addFile(authorization, body.id, 'c.txt', 'text/plain');
-        addFile(authorization, body.id, 'a.txt', 'text/plain');
-        addFile(authorization, body.id, 'b.txt', 'text/plain');
-        addFile(authorization, body.id, 'c.txt', 'text/plain');
-        addFile(authorization, body.id, 'a.txt', 'text/plain');
-        addFile(authorization, body.id, 'b.txt', 'text/plain');
-        addFile(authorization, body.id, 'c.txt', 'text/plain');
-        addFile(authorization, body.id, 'a.txt', 'text/plain');
-        addFile(authorization, body.id, 'b.txt', 'text/plain');
-        addFile(authorization, body.id, 'c.txt', 'text/plain');
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 1024);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 1024000);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 1024000000);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 2048);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 2048000);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 2048000000);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 4096);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 4096000);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 4096000000);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 8192);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 8192000);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 8192000000);
     });
 }
 

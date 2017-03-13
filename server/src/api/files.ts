@@ -10,13 +10,14 @@ const FILE_SCHEMA = {
         folder_id: { type: 'number' },
         name: { type: 'string' },
         mime: { type: 'string' },
+        size: { type: 'number' },
     },
-    required: ['folder_id', 'name', 'mime'],
+    required: ['folder_id', 'name', 'mime', 'size'],
 };
 
 /** Handles POST /files (file creation). */
 function postFiles(request: Request, response: Response, next: NextFunction) {
-    Db.callOne('insert_file', request.body.folder_id, request.body.name, request.body.mime).then(result => {
+    Db.callOne('insert_file', request.body.folder_id, request.body.name, request.body.mime, request.body.size).then(result => {
         result.file_id = parseInt(result.file_id);
         result.version_id = parseInt(result.version_id);
         response.status(200).json(result);
