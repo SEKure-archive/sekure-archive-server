@@ -21,5 +21,5 @@ node target/index.js &
 echo 'Populating the database in 5 seconds...'
 sleep 5
 echo 'Populating the database...'
-node populate.js 8080
+node populate.js 80
 fg

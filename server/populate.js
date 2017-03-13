@@ -26,11 +26,11 @@ function addUser(email, password, callback) {
 
 function addFile(authorization, folder_id, name, mime) {
     let body = { folder_id: folder_id, name: name, mime: mime };
-    makeRequest('POST', '/files', body, { authorization: authorization });
+    makeRequest('POST', '/files', body, { authorization: `Bearer ${authorization}` });
 }
 
 function addFolder(authorization, path) {
-    let headers = { authorization: authorization };
+    let headers = { authorization: `Bearer ${authorization}` };
     makeRequest('POST', '/folders', { path: path }, headers, (body) => {
         addFile(authorization, body.id, 'a.txt', 'text/plain');
         addFile(authorization, body.id, 'b.txt', 'text/plain');
