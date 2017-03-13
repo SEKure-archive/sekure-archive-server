@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcryptjs';
 import { Application, NextFunction, Request, Response } from 'express';
 
+import * as auth from '../auth';
 import * as json from '../json';
-import * as jwt from '../jwt';
 import { Db } from '../db';
 
 const ACCOUNT_SCHEMA = {
@@ -13,6 +13,17 @@ const ACCOUNT_SCHEMA = {
     },
     required: ['email', 'password'],
 };
+
+/** Returns whether the supplied account credentials are valid. */
+export function authenticate(email: string, password: string): Promise<boolean> {
+    return Db.call('select_account_password', email).then(hash => {
+        if (hash) {
+            return bcrypt.compare(password, hash);
+        } else {
+            return false;
+        }
+    });
+}
 
 /** Checks that the user-supplied password meets password requirements. */
 function checkPassword(request: Request, response: Response, next: NextFunction) {
@@ -30,7 +41,7 @@ function postAccounts(request: Request, response: Response, next: NextFunction) 
     bcrypt.hash(request.body.password, process.env.BCRYPT_ROUNDS).then(password => {
         Db.call('insert_account', request.body.email, password).then(success => {
             if (success) {
-                response.status(200).json({ jwt: jwt.generate(request.body.email) });
+                response.status(200).json({ jwt: auth.generate(request.body.email) });
             } else {
                 response.status(403).json({ error: 'Email is already in use.' });
             }
@@ -40,15 +51,9 @@ function postAccounts(request: Request, response: Response, next: NextFunction) 
 
 /** Handles POST /accounts/login (account login). */
 function postAccountsLogin(request: Request, response: Response, next: NextFunction) {
-    Db.call('select_account_password', request.body.email).then(password => {
-        if (password) {
-            bcrypt.compare(request.body.password, password).then(success => {
-                if (success) {
-                    response.status(200).json({ jwt: jwt.generate(request.body.email) });
-                } else {
-                    response.status(403).json({ error: 'Invalid email or password.' });
-                }
-            }, next);
+    authenticate(request.body.email, request.body.password).then(success => {
+        if (success) {
+            response.status(200).json({ jwt: auth.generate(request.body.email) });
         } else {
             response.status(403).json({ error: 'Invalid email or password.' });
         }

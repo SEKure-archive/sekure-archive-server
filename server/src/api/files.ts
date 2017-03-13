@@ -1,7 +1,7 @@
 import { Application, NextFunction, Request, Response } from 'express';
 
+import * as auth from '../auth';
 import * as json from '../json';
-import * as jwt from '../jwt';
 import { Db } from '../db';
 
 const FILE_SCHEMA = {
@@ -36,6 +36,6 @@ function getFile(request: Request, response: Response, next: NextFunction) {
 }
 
 export function use(application: Application) {
-    application.post('/files', jwt.authenticate, json.validate(FILE_SCHEMA), postFiles);
-    application.get('/files/:fileID', jwt.authenticate, getFile);
+    application.post('/files', auth.authenticate, json.validate(FILE_SCHEMA), postFiles);
+    application.get('/files/:fileID', auth.authenticate, getFile);
 }

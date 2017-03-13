@@ -1,7 +1,7 @@
 import { Application, NextFunction, Request, Response } from 'express';
 
+import * as auth from '../auth';
 import * as json from '../json';
-import * as jwt from '../jwt';
 import { Db } from '../db';
 
 const FOLDER_SCHEMA = {
@@ -45,7 +45,7 @@ function getFolder(request: Request, response: Response, next: NextFunction) {
 }
 
 export function use(application: Application) {
-    application.get('/folders', jwt.authenticate, getFolders);
-    application.post('/folders', jwt.authenticate, json.validate(FOLDER_SCHEMA), postFolders);
-    application.get('/folders/:folderID', jwt.authenticate, getFolder);
+    application.get('/folders', auth.authenticate, getFolders);
+    application.post('/folders', auth.authenticate, json.validate(FOLDER_SCHEMA), postFolders);
+    application.get('/folders/:folderID', auth.authenticate, getFolder);
 }

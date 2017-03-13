@@ -30,7 +30,7 @@ describe('/folders', () => {
             .send({ email: 'eric@samson.com', password: 'hunter322' })
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                eric = response.body.jwt;
+                eric = `Bearer ${response.body.jwt}`;
             }).end(done);
     });
 
