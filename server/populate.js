@@ -32,18 +32,18 @@ function addFile(authorization, folder_id, name, mime, size) {
 function addFolder(authorization, path) {
     let headers = { authorization: `Bearer ${authorization}` };
     makeRequest('POST', '/folders', { path: path }, headers, (body) => {
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 1024);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 1024000);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 1024000000);
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 2048);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 2048000);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 2048000000);
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 4096);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 4096000);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 4096000000);
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 8192);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 8192000);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 8192000000);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 1011);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 1512341);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 1241235123);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 2051);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 2512315);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 2184123891);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 4051);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 4012312);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 4512351233);
+        addFile(authorization, body.id, 'a.txt', 'text/plain', 8141);
+        addFile(authorization, body.id, 'b.txt', 'text/plain', 8151233);
+        addFile(authorization, body.id, 'c.txt', 'text/plain', 8912581274);
     });
 }
 
