@@ -17,9 +17,5 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.BCRYPT_ROUNDS': 13,
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: true,
-            comments: false,
-        }),
     ],
 };
