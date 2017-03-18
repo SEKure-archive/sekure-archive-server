@@ -1,3 +1,4 @@
+import * as aws from 'aws-sdk';
 import * as request from 'supertest';
 import { expect } from 'chai';
 import { Response } from 'supertest';
@@ -5,24 +6,6 @@ import { Response } from 'supertest';
 import { APPLICATION } from './test';
 
 describe('/files', () => {
-    it('disallows the creation of /foo/test.txt without authorization', done => {
-        request(APPLICATION).post('/files')
-            .send({ folder_id: 1, name: 'test.txt', mime: 'text/plain' })
-            .expect((response: Response) => {
-                expect(response.status).to.equal(403);
-                expect(response.body.error).to.equal('Permission denied.');
-            }).end(done);
-    });
-
-    it('disallows the creation of /foo/bar/test.txt without authorization', done => {
-        request(APPLICATION).post('/files')
-            .send({ folder_id: 2, name: 'test.txt', mime: 'text/plain' })
-            .expect((response: Response) => {
-                expect(response.status).to.equal(403);
-                expect(response.body.error).to.equal('Permission denied.');
-            }).end(done);
-    });
-
     let eric: string;
 
     it('allows eric@samson.com to log in', done => {
@@ -34,51 +17,63 @@ describe('/files', () => {
             }).end(done);
     });
 
-    it('allows the creation of /foo/test.txt', done => {
+    let one = {
+        region: 'us-east-1',
+        accessKeyID: 'TOPSECRET',
+        secretAccessKey: 'TOPSECRET',
+        folder: '/baz',
+        name: 'test.txt',
+        mime: 'text/plain',
+        size: 1024,
+        created: '2017-03-18 10:26:00',
+        s3: 's3://sekurearchive/baz/test.txt',
+    };
+
+    let two = {
+        region: 'us-east-1',
+        accessKeyID: 'TOPSECRET',
+        secretAccessKey: 'TOPSECRET',
+        folder: '/baz/qux',
+        name: 'test.txt',
+        mime: 'text/plain',
+        size: 2048,
+        created: '2017-03-18 10:26:00',
+        s3: 's3://sekurearchive/baz/qux/test.txt',
+    };
+
+    it('allows the creation of /baz/test.txt', done => {
         request(APPLICATION).post('/files')
-            .send({ folder_id: 1, name: 'test.txt', mime: 'text/plain', size: 1024 })
-            .set('Authorization', eric)
+            .send(one)
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.file_id).to.equal(1);
-                expect(response.body.version_id).to.equal(1);
             }).end(done);
     });
 
-    it('allows the creation of /foo/bar/test.txt', done => {
+    it('allows the creation of /baz/qux/test.txt', done => {
         request(APPLICATION).post('/files')
-            .send({ folder_id: 2, name: 'test.txt', mime: 'text/plain', size: 2048 })
-            .set('Authorization', eric)
+            .send(two)
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.file_id).to.equal(2);
-                expect(response.body.version_id).to.equal(2);
             }).end(done);
     });
 
-    it('allows the creation of a new version of /foo/test.txt', done => {
+    it('allows the creation of a new version of /baz/test.txt', done => {
         request(APPLICATION).post('/files')
-            .send({ folder_id: 1, name: 'test.txt', mime: 'text/plain', size: 1024 })
-            .set('Authorization', eric)
+            .send(one)
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.file_id).to.equal(1);
-                expect(response.body.version_id).to.equal(3);
             }).end(done);
     });
 
-    it('allows the creation of a new version of /foo/bar/test.txt', done => {
+    it('allows the creation of a new version of /baz/qux/test.txt', done => {
         request(APPLICATION).post('/files')
-            .send({ folder_id: 2, name: 'test.txt', mime: 'text/plain', size: 2048 })
-            .set('Authorization', eric)
+            .send(two)
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.file_id).to.equal(2);
-                expect(response.body.version_id).to.equal(4);
             }).end(done);
     });
 
-    it('allows querying /foo/test.txt', done => {
+    it('allows querying /baz/test.txt', done => {
         request(APPLICATION).get('/files/1')
             .set('Authorization', eric)
             .expect((response: Response) => {
@@ -92,7 +87,7 @@ describe('/files', () => {
             }).end(done);
     });
 
-    it('allows querying /foo/bar/test.txt', done => {
+    it('allows querying /baz/qux/test.txt', done => {
         request(APPLICATION).get('/files/2')
             .set('Authorization', eric)
             .expect((response: Response) => {
@@ -106,27 +101,39 @@ describe('/files', () => {
             }).end(done);
     });
 
-    it('allows querying /foo', done => {
-        request(APPLICATION).get('/folders/1')
+    it('allows querying /baz', done => {
+        request(APPLICATION).get('/folders/3')
             .set('Authorization', eric)
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.id).to.equal(1);
-                expect(response.body.path).to.equal('/foo');
-                let files = [{ id: 1, folder_id: 1, name: 'test.txt', mime: 'text/plain', size: 1024 }];
-                expect(response.body.files).to.deep.equal(files);
+                expect(response.body.id).to.equal(3);
+                expect(response.body.path).to.equal('/baz');
+                let file = {
+                    id: 1,
+                    folder_id: 3,
+                    name: 'test.txt',
+                    mime: 'text/plain',
+                    size: 1024,
+                };
+                expect(response.body.files).to.deep.equal([file]);
             }).end(done);
     });
 
-    it('allows querying /foo/bar', done => {
-        request(APPLICATION).get('/folders/2')
+    it('allows querying /baz/qux', done => {
+        request(APPLICATION).get('/folders/4')
             .set('Authorization', eric)
             .expect((response: Response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.id).to.equal(2);
-                expect(response.body.path).to.equal('/foo/bar');
-                let files = [{ id: 2, folder_id: 2, name: 'test.txt', mime: 'text/plain', size: 2048 }];
-                expect(response.body.files).to.deep.equal(files);
+                expect(response.body.id).to.equal(4);
+                expect(response.body.path).to.equal('/baz/qux');
+                let file = {
+                    id: 2,
+                    folder_id: 4,
+                    name: 'test.txt',
+                    mime: 'text/plain',
+                    size: 2048,
+                };
+                expect(response.body.files).to.deep.equal([file]);
             }).end(done);
     });
 });

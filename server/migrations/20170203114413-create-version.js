@@ -2,7 +2,8 @@ const UP = `
     CREATE TABLE version(
         id BIGSERIAL CONSTRAINT PK_version PRIMARY KEY,
         file_id BIGINT REFERENCES file(id),
-        created TIMESTAMP DEFAULT current_timestamp
+        created TIMESTAMP NOT NULL,
+        s3 TEXT NOT NULL
     )
 `;
 

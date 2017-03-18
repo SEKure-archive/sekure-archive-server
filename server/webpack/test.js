@@ -19,6 +19,7 @@ module.exports = {
             'global.GENTLY': false,
             'process.env.BCRYPT_ROUNDS': 5,
             'process.env.JWT_SECRET': JSON.stringify('TOPSECRET'),
+            'process.env.SKIP_AWS_VALIDATE': true,
         }),
     ],
 };

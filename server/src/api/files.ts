@@ -1,26 +1,44 @@
 import { Application, NextFunction, Request, Response } from 'express';
 
 import * as auth from '../auth';
+import * as aws from '../aws';
 import * as json from '../json';
 import { Db } from '../db';
 
 const FILE_SCHEMA = {
     type: 'object',
     properties: {
-        folder_id: { type: 'number' },
+        region: { type: 'string' },
+        accessKeyID: { type: 'string' },
+        secretAccessKey: { type: 'string' },
+        folder: { type: 'string' },
         name: { type: 'string' },
         mime: { type: 'string' },
         size: { type: 'number' },
+        created: { type: 'string' },
+        s3: { type: 'string' },
     },
-    required: ['folder_id', 'name', 'mime', 'size'],
+    required: ['region', 'accessKeyID', 'secretAccessKey', 'folder', 'name', 'mime', 'size', 'created', 's3'],
 };
 
 /** Handles POST /files (file creation). */
 function postFiles(request: Request, response: Response, next: NextFunction) {
-    Db.callOne('insert_file', request.body.folder_id, request.body.name, request.body.mime, request.body.size).then(result => {
-        result.file_id = parseInt(result.file_id);
-        result.version_id = parseInt(result.version_id);
-        response.status(200).json(result);
+    aws.validate(request.body.region, request.body.accessKeyID, request.body.secretAccessKey).then(success => {
+        return Db.call(
+            'insert_file',
+            request.body.folder,
+            request.body.name,
+            request.body.mime,
+            request.body.size,
+            request.body.created,
+            request.body.s3,
+        ).then(success => {
+            if (success) {
+                response.status(200).end();
+            } else {
+                response.status(400).end();
+            }
+        });
     }, next);
 }
 
@@ -37,6 +55,6 @@ function getFile(request: Request, response: Response, next: NextFunction) {
 }
 
 export function use(application: Application) {
-    application.post('/files', auth.authenticate, json.validate(FILE_SCHEMA), postFiles);
+    application.post('/files', json.validate(FILE_SCHEMA), postFiles);
     application.get('/files/:fileID', auth.authenticate, getFile);
 }
