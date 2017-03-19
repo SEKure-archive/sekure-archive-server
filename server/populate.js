@@ -24,26 +24,36 @@ function addUser(email, password, callback) {
     makeRequest('POST', '/accounts', { email: email, password: password }, null, callback);
 }
 
-function addFile(authorization, folder_id, name, mime, size) {
-    let body = { folder_id: folder_id, name: name, mime: mime, size: size };
-    makeRequest('POST', '/files', body, { authorization: `Bearer ${authorization}` });
+function addFile(folder, name, mime, size, created) {
+    let body = {
+        region: 'us-east-1',
+        accessKeyID: 'TOPSECRET',
+        secretAccessKey: 'TOPSECRET',
+        folder: folder,
+        name: name,
+        mime: mime,
+        size: size,
+        created: created,
+        s3: `s3://sekurearchive/${folder}/${name}`,
+    };
+    makeRequest('POST', '/files', body, null);
 }
 
 function addFolder(authorization, path) {
     let headers = { authorization: `Bearer ${authorization}` };
     makeRequest('POST', '/folders', { path: path }, headers, (body) => {
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 1011);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 1512341);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 1241235123);
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 2051);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 2512315);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 2184123891);
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 4051);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 4012312);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 4512351233);
-        addFile(authorization, body.id, 'a.txt', 'text/plain', 8141);
-        addFile(authorization, body.id, 'b.txt', 'text/plain', 8151233);
-        addFile(authorization, body.id, 'c.txt', 'text/plain', 8912581274);
+        addFile(path, 'a.txt', 'text/plain', 1011, '2017-03-19 04:17');
+        addFile(path, 'b.txt', 'text/plain', 1512341, '2017-03-19 04:18');
+        addFile(path, 'c.txt', 'text/plain', 1241235123, '2017-03-19 04:19');
+        addFile(path, 'a.txt', 'text/plain', 2051, '2017-03-19 04:17');
+        addFile(path, 'b.txt', 'text/plain', 2512315, '2017-03-19 04:18');
+        addFile(path, 'c.txt', 'text/plain', 2184123891, '2017-03-19 04:19');
+        addFile(path, 'a.txt', 'text/plain', 4051, '2017-03-19 04:17');
+        addFile(path, 'b.txt', 'text/plain', 4012312, '2017-03-19 04:18');
+        addFile(path, 'c.txt', 'text/plain', 4512351233, '2017-03-19 04:19');
+        addFile(path, 'a.txt', 'text/plain', 8141, '2017-03-19 04:17');
+        addFile(path, 'b.txt', 'text/plain', 8151233, '2017-03-19 04:18');
+        addFile(path, 'c.txt', 'text/plain', 8912581274, '2017-03-19 04:19');
     });
 }
 

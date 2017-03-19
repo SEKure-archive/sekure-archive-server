@@ -16,6 +16,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env.BCRYPT_ROUNDS': 5,
+            'process.env.DEVELOPMENT': true,
             'process.env.JWT_SECRET': JSON.stringify('TOPSECRET'),
         }),
     ],

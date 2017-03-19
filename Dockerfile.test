@@ -13,6 +13,7 @@ RUN cd tmp && npm install
 RUN mkdir server && mv tmp/node_modules server/node_modules
 
 ADD server server
+ENV SKIP_AWS_VALIDATE=1
 CMD cd server && sh test.sh
 
 EXPOSE 80 443

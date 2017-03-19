@@ -8,6 +8,10 @@ import * as https from 'https';
 import { start } from './application';
 import { Db } from './db';
 
+if (process.env.DEVELOPMENT) {
+    console.log('!!!WARNING!!! Running the server in development mode!')
+}
+
 const PORT = process.env.PORT || 80;
 
 Db.initialize().then(() => {
