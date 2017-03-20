@@ -54,7 +54,21 @@ function getFile(request: Request, response: Response, next: NextFunction) {
     }, next);
 }
 
+/** Handles GET /files/:fileID/download (file download). */
+function getFileDownload(request: Request, response: Response, next: NextFunction) {
+    Db.callOne('select_file_latest', request.params.fileID).then(file => {
+        if (file) {
+            aws.post(file.d, file.f, file.s3).then(id => {
+                response.status(200).json({ id: id });
+            }, next);
+        } else {
+            response.status(404).json({ error: 'No such file.' });
+        }
+    }, next);
+}
+
 export function use(application: Application) {
     application.post('/files', json.validate(FILE_SCHEMA), postFiles);
     application.get('/files/:fileID', auth.authenticate, getFile);
+    application.get('/files/:fileID/download', getFileDownload);
 }

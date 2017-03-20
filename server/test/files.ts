@@ -136,4 +136,24 @@ describe('/files', () => {
                 expect(response.body.files).to.deep.equal([file]);
             }).end(done);
     });
+
+    it('allows the download of /baz/test.txt', done => {
+        request(APPLICATION).get('/files/1/download')
+            .set('Authorization', eric)
+            .send({ file_id: 1 })
+            .expect((response: Response) => {
+                expect(response.status).to.equal(200);
+                expect(response.body.id).to.equal('message_identifier');
+            }).end(done);
+    });
+
+    it('allows the download of /baz/qux/test.txt', done => {
+        request(APPLICATION).get('/files/2/download')
+            .set('Authorization', eric)
+            .send({ file_id: 2 })
+            .expect((response: Response) => {
+                expect(response.status).to.equal(200);
+                expect(response.body.id).to.equal('message_identifier');
+            }).end(done);
+    });
 });

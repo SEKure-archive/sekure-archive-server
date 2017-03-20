@@ -7,6 +7,7 @@ import * as accounts from './api/accounts';
 export function generate(email: string): string {
     return jwt.sign({ data: email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 }
+
 /** Returns whether the supplied username and password is valid. */
 function basicVerify(token: string, next: NextFunction) {
     let string = new Buffer(token, 'base64').toString('utf-8');
