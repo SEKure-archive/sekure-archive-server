@@ -11,9 +11,9 @@ export function post(directory: string, file: string, s3: string): Promise<strin
                 QueueUrl: 'https://sqs.us-east-1.amazonaws.com/373886653085/download',
                 MessageBody: 'Download',
                 MessageAttributes: {
-                    directory: { DataType: 'string', StringValue: directory },
-                    filename: { DataType: 'string', StringValue: file },
-                    s3path: { DataType: 'string', StringValue: s3 },
+                    directory: { DataType: 'String', StringValue: directory },
+                    filename: { DataType: 'String', StringValue: file },
+                    s3path: { DataType: 'String', StringValue: s3 },
                 },
             };
             sqs.sendMessage(params, (error, data) => {
