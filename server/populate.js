@@ -34,7 +34,7 @@ function addFile(folder, name, mime, size, created) {
         mime: mime,
         size: size,
         created: created,
-        s3: `s3://sekurearchive${folder}/${name}`,
+        s3: `sekure-archive${folder}/${name}`,
     };
     makeRequest('POST', '/files', body, null);
 }
