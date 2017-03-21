@@ -21,6 +21,7 @@ export function start(): Application {
     let application = express();
     application.use(cors());
     application.use(parser.json());
+    application.get('/ping', (request, response) => response.status(200).end());
     accounts.use(application);
     files.use(application);
     folders.use(application);
