@@ -42,7 +42,7 @@ function current(client) {
 // Load the migration files
 function files(migrations) {
     let files = fs.readdirSync(`${__dirname}/migrations`);
-    return files.filter(file => !migrations.some(row => file == row.name));
+    return files.filter(file => file != 'functions.js' && !migrations.some(row => file == row.name));
 }
 
 // Apply the supplied up migration
@@ -50,7 +50,10 @@ function applyUp(client, name) {
     var migration = require(`${__dirname}/migrations/${name}`);
     return migration.up(query.bind(query, client)).then(() => {
         console.log(`UP -- ${name}`);
-        return query(client, 'INSERT INTO _migration(name) SELECT $1', [name]);
+        return query(client, `
+            INSERT INTO _migration(name) SELECT $1
+            WHERE NOT EXISTS (SELECT name FROM _migration WHERE name = $1);
+        `, [name]);
     });
 }
 
@@ -59,7 +62,7 @@ function up(client) {
     return current(client).then((migrations) => {
         return files(migrations).reduce((promise, file) => {
             return promise.then(() => applyUp(client, file));
-        }, Promise.resolve());
+        }, Promise.resolve()).then(() => applyUp(client, 'functions.js'));
     });
 }
 
