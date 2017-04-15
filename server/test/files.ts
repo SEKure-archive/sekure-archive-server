@@ -57,6 +57,9 @@ describe('/files', () => {
             }).end(done);
     });
 
+    one.created = '2017-03-19 10:26:00';
+    two.created = '2017-03-19 10:26:00';
+
     it('allows the creation of a new version of /baz/test.txt', done => {
         request(APPLICATION).post('/files')
             .send(one)
@@ -114,6 +117,7 @@ describe('/files', () => {
                     name: 'test.txt',
                     mime: 'text/plain',
                     size: 1024,
+                    created: '2017-03-19T10:26:00',
                 };
                 expect(response.body.files).to.deep.equal([file]);
             }).end(done);
@@ -132,6 +136,7 @@ describe('/files', () => {
                     name: 'test.txt',
                     mime: 'text/plain',
                     size: 2048,
+                    created: '2017-03-19T10:26:00',
                 };
                 expect(response.body.files).to.deep.equal([file]);
             }).end(done);

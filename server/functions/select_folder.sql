@@ -14,7 +14,13 @@ BEGIN
     END IF;
 
     -- Return the folder and the files in the folder
-    _fs := array(SELECT row_to_json(row) FROM (SELECT * FROM file WHERE folder_id = $1) row);
+    _fs := array(SELECT row_to_json(row) FROM (
+        SELECT file.*, version.created
+        FROM file, version
+        WHERE file.folder_id = $1 AND version.file_id = file.id
+        ORDER BY version.created ASC
+        LIMIT 1
+    ) row);
     RETURN (_f, _fs);
 END;
 $$ LANGUAGE plpgsql;
