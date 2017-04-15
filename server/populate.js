@@ -45,15 +45,15 @@ function addFolder(authorization, path) {
         addFile(path, 'a.txt', 'text/plain', 1011, '2017-03-19 04:17');
         addFile(path, 'b.txt', 'text/plain', 1512341, '2017-03-19 04:18');
         addFile(path, 'c.txt', 'text/plain', 1241235123, '2017-03-19 04:19');
-        addFile(path, 'a.txt', 'text/plain', 2051, '2017-03-19 04:17');
-        addFile(path, 'b.txt', 'text/plain', 2512315, '2017-03-19 04:18');
-        addFile(path, 'c.txt', 'text/plain', 2184123891, '2017-03-19 04:19');
-        addFile(path, 'a.txt', 'text/plain', 4051, '2017-03-19 04:17');
-        addFile(path, 'b.txt', 'text/plain', 4012312, '2017-03-19 04:18');
-        addFile(path, 'c.txt', 'text/plain', 4512351233, '2017-03-19 04:19');
-        addFile(path, 'a.txt', 'text/plain', 8141, '2017-03-19 04:17');
-        addFile(path, 'b.txt', 'text/plain', 8151233, '2017-03-19 04:18');
-        addFile(path, 'c.txt', 'text/plain', 8912581274, '2017-03-19 04:19');
+        addFile(path, 'a.txt', 'text/plain', 2051, '2017-03-19 04:18');
+        addFile(path, 'b.txt', 'text/plain', 2512315, '2017-03-19 04:19');
+        addFile(path, 'c.txt', 'text/plain', 2184123891, '2017-03-19 04:20');
+        addFile(path, 'a.txt', 'text/plain', 4051, '2017-03-19 04:19');
+        addFile(path, 'b.txt', 'text/plain', 4012312, '2017-03-19 04:20');
+        addFile(path, 'c.txt', 'text/plain', 4512351233, '2017-03-19 04:21');
+        addFile(path, 'a.txt', 'text/plain', 8141, '2017-03-19 04:20');
+        addFile(path, 'b.txt', 'text/plain', 8151233, '2017-03-19 04:21');
+        addFile(path, 'c.txt', 'text/plain', 8912581274, '2017-03-19 04:22');
     });
 }
 

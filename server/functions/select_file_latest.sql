@@ -20,10 +20,7 @@ BEGIN
     SELECT path INTO _d FROM folder WHERE id = _folder_id;
 
     -- Select the S3 link from the most recent version of the file
-    SELECT s3 INTO _s3
-    FROM version v1
-    WHERE created = (SELECT MAX(created) FROM version v2 WHERE v1.id = v2.id)
-    GROUP BY id;
+    SELECT s3 INTO _s3 FROM version WHERE file_id = $1 ORDER BY created DESC;
 
     -- Return the file and the versions of the file
     RETURN (_d, _f, _s3);
