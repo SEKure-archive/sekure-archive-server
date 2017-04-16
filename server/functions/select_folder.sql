@@ -15,11 +15,11 @@ BEGIN
 
     -- Return the folder and the files in the folder
     _fs := array(SELECT row_to_json(row) FROM (
-        SELECT file.*, version.created
-        FROM file, version
-        WHERE file.folder_id = $1 AND version.file_id = file.id
-        ORDER BY version.created ASC
-        LIMIT 1
+        WITH
+        fs AS (SELECT * FROM file WHERE folder_id = $1),
+        vs AS (SELECT DISTINCT ON (file_id) * FROM version ORDER BY file_id, created DESC)
+        SELECT fs.*, vs.created FROM fs
+        INNER JOIN vs ON fs.id = vs.file_id
     ) row);
     RETURN (_f, _fs);
 END;
