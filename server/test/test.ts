@@ -9,3 +9,4 @@ after(done => { Db.terminate(); done(); });
 import './accounts';
 import './folders';
 import './files';
+import './search';

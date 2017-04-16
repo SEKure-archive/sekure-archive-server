@@ -6,6 +6,7 @@ import { Application, NextFunction, Response, Request } from 'express';
 import * as accounts from './api/accounts';
 import * as files from './api/files';
 import * as folders from './api/folders';
+import * as search from './api/search';
 
 /** Reports any uncaught errors as internal server errors. */
 function ise(error: any, request: Request, response: Response, next: NextFunction) {
@@ -25,6 +26,7 @@ export function start(): Application {
     accounts.use(application);
     files.use(application);
     folders.use(application);
+    search.use(application);
     application.use(ise);
     return application;
 }
