@@ -16,7 +16,7 @@ const SEARCH_SCHEMA = {
 /** Handles POST /search (file searching). */
 function postSearch(request: Request, response: Response, next: NextFunction) {
     Db.call('search_files', request.body.query).then(results => {
-        response.status(200).json({ results });
+        response.status(200).json({ results: results });
     }, next);
 }
 
