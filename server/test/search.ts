@@ -18,7 +18,7 @@ describe('/files', () => {
     });
 
     it('allows searching for /foo', done => {
-        request(APPLICATION).get('/search')
+        request(APPLICATION).post('/search')
             .set('Authorization', eric)
             .send({ query: '.txt' })
             .expect((response: Response) => {
